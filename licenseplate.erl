@@ -16,9 +16,17 @@
 
 -compile(export_all).
 
-hello() -> io:fwrite("Hello!\n",[]).
+start() ->
+	File = "test.txt",
+	start(File).
 
 start(File) ->
-	{ok, Bin} = file:read_file(File),
-	List = binary_to_list(Bin,1,6),
-	List2 = binary_to_list(Bin,9,14).
+	{ok,Bin} = readFile(File).
+	
+
+
+readFile(File) -> file:read_file(File).
+
+partitionBin(binary,start,stop) -> binary:part(binary,start,stop).
+
+findMatch(hd,tl) -> binary:split(hd,tl,[global]).
