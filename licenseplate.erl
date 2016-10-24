@@ -21,12 +21,15 @@ start() ->
 	start(File).
 
 start(File) ->
-	{ok,Bin} = readFile(File).
-	
-
+	{ok,Bin} = readFile(File),
+	[HD|TL] = splitBin(Bin,<<"\r\n">>),
+	[X|XS] = TL,
+	findMatch(HD,X).
 
 readFile(File) -> file:read_file(File).
 
-partitionBin(binary,start,stop) -> binary:part(binary,start,stop).
+partitionBin(Binary,Start,Stop) -> binary:part(Binary,Start,Stop).
 
-findMatch(hd,tl) -> binary:split(hd,tl,[global]).
+splitBin(Binary,Split) -> binary:split(Binary,Split).
+
+findMatch(X,XS) -> binary:match(XS,X).
