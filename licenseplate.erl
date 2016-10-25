@@ -22,14 +22,25 @@ start() ->
 
 start(File) ->
 	{ok,Bin} = readFile(File),
+	Res = findMatch({0,0},Bin,1),
+	if
+	Res == nomatch -> io:fwrite("Ingen kopia!\n");
+	true -> io:fwrite("Kopia!\n")
+	end.
+
+findMatch(Result,[],_) -> Result;
+
+findMatch(Result,Bin,Count) ->
 	[HD|TL] = splitBin(Bin,<<"\r\n">>),
 	[X|XS] = TL,
-	findMatch(HD,X).
-
+	Res = testMatch(HD,X),
+	io:fwrite("Count: ~w~n",[Count]),
+	findMatch(Res,X,Count+1).
+	
 readFile(File) -> file:read_file(File).
 
 partitionBin(Binary,Start,Stop) -> binary:part(Binary,Start,Stop).
 
 splitBin(Binary,Split) -> binary:split(Binary,Split).
 
-findMatch(X,XS) -> binary:match(XS,X).
+testMatch(X,XS) -> binary:match(XS,X).
